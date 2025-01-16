@@ -27,9 +27,17 @@ export const AddCostForm = () => {
 
   const handleSubmit = async () => {
     //async handler for the submit button to save the data in the idb
+    if (!form.category || !form.sum || form.sum === 0) {
+      alert("didnt fill the form");
+      return;
+    }
+    const now = new Date();
+    const month = String(now.getMonth() + 1).padStart(2, "0"); // Add 1 because months are 0-indexed
+    const year = now.getFullYear();
+    const formattedDate = `${month}/${year}`;
     const data = {
       ...form,
-      date: new Date(),
+      date: formattedDate,
     };
 
     try {
