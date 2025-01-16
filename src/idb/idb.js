@@ -30,4 +30,40 @@ const addCost = (cost) => {
   });
 };
 
-export default { addCost };
+const getReport = (monthYear) => {
+  return initDB().then((db) => {
+    return new Promise((resolve, reject) => {
+      const transaction = db.transaction(storeName, "readonly");
+      const store = transaction.objectStore(storeName);
+      const request = store.openCursor();
+      const results = [];
+
+      request.onsuccess = (event) => {
+        const cursor = event.target.result;
+        if (cursor) {
+          const record = cursor.value;
+          if (record.date === monthYear) {
+            const existingCategory = results.find(
+              (obj) => obj.category === record.category,
+            );
+            if (existingCategory) {
+              existingCategory.sum += record.sum;
+            } else {
+              results.push({
+                category: record.category,
+                sum: record.sum,
+              });
+            }
+          }
+          cursor.continue();
+        } else {
+          resolve(results);
+        }
+      };
+
+      request.onerror = () => reject(request.error);
+    });
+  });
+};
+
+export default { addCost, getReport };

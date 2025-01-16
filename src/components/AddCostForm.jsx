@@ -65,9 +65,9 @@ export const AddCostForm = () => {
           <MenuItem value="">
             <em>Category</em>
           </MenuItem>
-          <MenuItem value={10}>Ten</MenuItem>
-          <MenuItem value={20}>Twenty</MenuItem>
-          <MenuItem value={30}>Thirty</MenuItem>
+          <MenuItem value={10}>category1</MenuItem>
+          <MenuItem value={20}>category2</MenuItem>
+          <MenuItem value={30}>category3</MenuItem>
         </Select>
       </FormControl>
       <TextField
