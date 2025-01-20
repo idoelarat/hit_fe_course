@@ -24,7 +24,7 @@ export default function DatePickerViews() {
       const data = await idb.getReport(formatedDate);
       console.log(`${JSON.stringify(data)}`);
       const formattedData = data.map((item) => ({
-        label: `Category ${item.category}`,
+        label: ` ${item.category}`,
         value: item.sum,
       }));
       setPieData(formattedData);
