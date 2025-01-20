@@ -60,7 +60,15 @@ export const AddCostForm = () => {
       noValidate
       autoComplete="off"
     >
-      <Typography variant="h3">Add new cost item:</Typography>
+      <Typography
+        variant="h3"
+        sx={{
+          fontSize: "clamp(1.5rem, 5vw, 3rem)", // Font size will range between 1.5rem and 3rem, with 5vw as the preferred value
+          textAlign: "center", // Center-align the text
+        }}
+      >
+        Add new cost item:
+      </Typography>
       <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
         <InputLabel id="demo-simple-select-standard-label">Category</InputLabel>
         <Select
