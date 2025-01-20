@@ -9,6 +9,7 @@ import { useState } from "react";
 import Button from "@mui/material/Button";
 import idb from "../idb/idb.js";
 
+//add costForm for the db
 export const AddCostForm = () => {
   const [form, setForm] = useState({
     //useState for the text fields in the form
