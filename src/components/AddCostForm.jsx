@@ -67,7 +67,6 @@ export const AddCostForm = () => {
           labelId="demo-simple-select-standard-label"
           id="demo-simple-select-standard"
           label="Category"
-          required
           value={form.category}
           onChange={(e) => setForm({ ...form, category: e.target.value })}
         >

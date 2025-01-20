@@ -15,7 +15,7 @@ export default function DatePickerViews() {
   const [selectedDate, setSelectedDate] = useState("");
   const [rawData, setRawData] = useState([]);
 
-  //value formater for the piechart component
+  //value formater for the piechart
   const valueFormatter = (item) => `${item.value}$`;
 
   const handleDatePicker = (date) => {
