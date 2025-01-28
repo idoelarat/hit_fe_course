@@ -1,9 +1,9 @@
-const dbName = "expensesDB";
+const dbName = "costsdb";
 const storeName = "expenses";
 
-//initiat the indexdb as documented
-const initDB = () => {
-  return new Promise((resolve, reject) => {
+// Open the database and attach custom methods to the db object
+const openCostsDB = async () => {
+  const db = await new Promise((resolve, reject) => {
     const request = indexedDB.open(dbName, 1);
 
     request.onupgradeneeded = () => {
@@ -16,31 +16,27 @@ const initDB = () => {
     request.onsuccess = () => resolve(request.result);
     request.onerror = () => reject(request.error);
   });
-};
 
-//adding cost to the indexdb as used in the addCost component
-const addCost = (cost) => {
-  return initDB().then((db) => {
+  //adding cost to the indexdb as used in the addCost component
+  db.addCost = async (cost) => {
+    const transaction = db.transaction(storeName, "readwrite");
+    const store = transaction.objectStore(storeName);
+
     return new Promise((resolve, reject) => {
-      const transaction = db.transaction(storeName, "readwrite");
-      const store = transaction.objectStore(storeName);
       const request = store.add(cost);
-
       request.onsuccess = () => resolve();
       request.onerror = () => reject(request.error);
     });
-  });
-};
+  };
 
-//getting report piechart values as used in the report view component
-const getReport = (monthYear) => {
-  return initDB().then((db) => {
+  //getting report piechart values as used in the report view component
+  db.getReport = async (monthYear) => {
+    const transaction = db.transaction(storeName, "readonly");
+    const store = transaction.objectStore(storeName);
+    const request = store.openCursor();
+    const results = [];
+
     return new Promise((resolve, reject) => {
-      const transaction = db.transaction(storeName, "readonly");
-      const store = transaction.objectStore(storeName);
-      const request = store.openCursor();
-      const results = [];
-
       request.onsuccess = (event) => {
         const cursor = event.target.result;
         if (cursor) {
@@ -48,7 +44,7 @@ const getReport = (monthYear) => {
           if (record.date === monthYear) {
             //checking to see if the monthYear value that got passed is in the db
             const existingCategory = results.find(
-              (obj) => obj.category === record.category,
+              (obj) => obj.category === record.category
             );
             if (existingCategory) {
               //suming the categories if it find data in the month and the year
@@ -69,17 +65,16 @@ const getReport = (monthYear) => {
 
       request.onerror = () => reject(request.error);
     });
-  });
-};
-//getting detail report used in the reportView component
-const getDetailedReport = (monthYear) => {
-  return initDB().then((db) => {
-    return new Promise((resolve, reject) => {
-      const transaction = db.transaction(storeName, "readonly");
-      const store = transaction.objectStore(storeName);
-      const request = store.openCursor();
-      const results = [];
+  };
 
+  //getting detail report used in the reportView component
+  db.getDetailedReport = async (monthYear) => {
+    const transaction = db.transaction(storeName, "readonly");
+    const store = transaction.objectStore(storeName);
+    const request = store.openCursor();
+    const results = [];
+
+    return new Promise((resolve, reject) => {
       request.onsuccess = (event) => {
         const cursor = event.target.result;
         if (cursor) {
@@ -96,7 +91,9 @@ const getDetailedReport = (monthYear) => {
 
       request.onerror = () => reject(request.error);
     });
-  });
+  };
+
+  return db;
 };
 
-export default { addCost, getReport, getDetailedReport };
+export default { openCostsDB };

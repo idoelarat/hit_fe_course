@@ -43,7 +43,8 @@ export const AddCostForm = () => {
 
     try {
       //if success then we passing it through the idb
-      await idb.addCost(data);
+      const db = await idb.openCostsDB("costsdb", 1);
+      await db.addCost(data);
       alert("Cost added successfully!");
       setForm({ category: "", description: "", sum: 0 });
     } catch (error) {

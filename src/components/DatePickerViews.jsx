@@ -5,7 +5,6 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import idb from "../idb/idb.js";
 import Button from "@mui/material/Button";
 import { PieChart } from "@mui/x-charts/PieChart";
-import * as React from "react";
 import { useState } from "react";
 import dayjs from "dayjs";
 
@@ -26,10 +25,11 @@ export default function DatePickerViews() {
   //handle data for selected date
   const handleData = async (formatedDate) => {
     try {
-      const detailData = await idb.getDetailedReport(formatedDate); //retrive data for the detailed data
+      const db = await idb.openCostsDB("costsdb", 1);
+      const detailData = await db.getDetailedReport(formatedDate); //retrive data for the detailed data
       setRawData(detailData); //set detailed data for usestate
 
-      const data = await idb.getReport(formatedDate); //retrive data for the piechart
+      const data = await db.getReport(formatedDate); //retrive data for the piechart
       console.log(`${JSON.stringify(data)}`); //shows console.log the sum per category
       //formating the pie chart data in map per label and value
       const formattedData = data.map((item) => ({
